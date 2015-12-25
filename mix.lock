@@ -1,2 +1,2 @@
-%{"exfile": {:git, "https://github.com/keichan34/exfile.git", "9c22be7d1778682832626d2f5ff48a37905effcb", []},
+%{"exfile": {:hex, :exfile, "0.0.1"},
   "plug": {:hex, :plug, "1.0.3"}}

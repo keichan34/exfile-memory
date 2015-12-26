@@ -3,7 +3,8 @@
 [![Build Status](https://travis-ci.org/keichan34/exfile-memory.svg?branch=master)](https://travis-ci.org/keichan34/exfile-memory)
 
 An in-memory (ets) storage adapter for [Exfile](https://github.com/keichan34/exfile).
-Usually doesn't make much sense because it will be completely emptied if your app restarts.
+Usually doesn't make much sense except for an ephemeral cache because it will be
+completely emptied if your app restarts. Also, not shared between nodes.
 
 ## Installation
 

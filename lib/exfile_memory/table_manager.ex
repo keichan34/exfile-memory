@@ -1,10 +1,17 @@
 defmodule ExfileMemory.TableManager do
+  @moduledoc """
+  TableManager keeps track of a ETS table.
+  """
+
   use GenServer
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
   end
 
+  @doc """
+  Returns the tid of the ets table the TableManager owns.
+  """
   def table(table_manager) do
     GenServer.call(table_manager, :table)
   end

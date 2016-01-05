@@ -39,7 +39,7 @@ defmodule ExfileMemory.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:exfile, ">= 0.0.1"}
+      {:exfile, "~> 0.0.4"}
     ]
   end
 

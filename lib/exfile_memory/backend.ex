@@ -12,7 +12,7 @@ defmodule ExfileMemory.Backend do
 
   def upload(backend, uploadable) do
     id = backend.hasher.hash(uploadable)
-    :ets.insert(backend.meta.table_id, {id, IO.read(uploadable, :all)})
+    :ets.insert(backend.meta.table_id, {id, IO.binread(uploadable, :all)})
     {:ok, %Exfile.File{backend: backend, id: id}}
   end
 
@@ -24,7 +24,7 @@ defmodule ExfileMemory.Backend do
   def open(backend, id) do
     case :ets.lookup(backend.meta.table_id, id) do
       [{^id, object} | _] ->
-        StringIO.open(object)
+        File.open(object, [:ram, :binary])
       _ ->
         {:error, :notexist}
     end
@@ -33,7 +33,7 @@ defmodule ExfileMemory.Backend do
   def size(backend, id) do
     case :ets.lookup(backend.meta.table_id, id) do
       [{^id, object} | _] ->
-        {:ok, byte_size(object)}
+        {:ok, IO.iodata_length(object)}
       _ ->
         {:error, :notexist}
     end

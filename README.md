@@ -12,7 +12,7 @@ completely emptied if your app restarts. Also, not shared between nodes.
 
         def deps do
           [
-            {:exfile, ">= 0.0.0"},
+            {:exfile, "~> 0.1.0"},
             {:exfile_memory, "~> 0.0.1"}
           ]
         end

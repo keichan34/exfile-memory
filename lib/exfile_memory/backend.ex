@@ -1,6 +1,8 @@
 defmodule ExfileMemory.Backend do
   use Exfile.Backend
 
+  alias Exfile.LocalFile
+
   def init(opts) do
     {:ok, backend} = super(opts)
     {:ok, table_manager} = ExfileMemory.Supervisor.start_backend
@@ -10,9 +12,10 @@ defmodule ExfileMemory.Backend do
     })
   end
 
-  def upload(backend, uploadable) do
-    id = backend.hasher.hash(uploadable)
-    :ets.insert(backend.meta.table_id, {id, IO.binread(uploadable, :all)})
+  def upload(backend, local_file) do
+    id = backend.hasher.hash(local_file)
+    {:ok, io} = LocalFile.open(local_file)
+    :ets.insert(backend.meta.table_id, {id, IO.binread(io, :all)})
     {:ok, %Exfile.File{backend: backend, id: id}}
   end
 
@@ -24,9 +27,10 @@ defmodule ExfileMemory.Backend do
   def open(backend, id) do
     case :ets.lookup(backend.meta.table_id, id) do
       [{^id, object} | _] ->
-        File.open(object, [:ram, :binary])
+        {:ok, io} = File.open(object, [:read, :binary, :ram])
+        {:ok, %LocalFile{io: io}}
       _ ->
-        {:error, :notexist}
+        {:error, :enoent}
     end
   end
 
@@ -35,7 +39,7 @@ defmodule ExfileMemory.Backend do
       [{^id, object} | _] ->
         {:ok, IO.iodata_length(object)}
       _ ->
-        {:error, :notexist}
+        {:error, :enoent}
     end
   end
 
